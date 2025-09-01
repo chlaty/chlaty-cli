@@ -1,0 +1,18 @@
+[package]
+name = "chlaty-cli"
+version = "0.1.0"
+edition = "2024"
+
+[profile.release]
+opt-level = 3 
+lto = true 
+strip = true
+
+[dependencies]
+chlaty-core = { git = "https://github.com/chlaty/chlaty-core", branch = "main" }
+clearscreen = "4.0.2"
+colored = "3.0.0"
+figlet-rs = "0.1.5"
+inquire = "0.7.5"
+tracing = "0.1.41"
+tracing-subscriber = "0.3"
