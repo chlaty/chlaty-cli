@@ -1,0 +1,247 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 61f54de..80187a5 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -68,6 +68,12 @@ version = "3.19.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "46c5e41b57b8bba42a04676d81cb89e9ee8e859a1a66f80a5a72e1cb76b34d43"
+ 
++[[package]]
++name = "bytecount"
++version = "0.6.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "175812e0be2bccb6abe50bb8d566126198344f707e304f45c648fd8f2cc0365e"
++
+ [[package]]
+ name = "byteorder"
+ version = "1.5.0"
+@@ -111,6 +117,7 @@ dependencies = [
+  "colored",
+  "figlet-rs",
+  "inquire",
++ "tabled",
+  "tracing",
+  "tracing-subscriber",
+ ]
+@@ -118,7 +125,7 @@ dependencies = [
+ [[package]]
+ name = "chlaty-core"
+ version = "0.1.0"
+-source = "git+https://github.com/chlaty/chlaty-core?branch=main#484f29115586bd5bf0f57883ec3c5d53d4c9c2aa"
++source = "git+https://github.com/chlaty/chlaty-core?branch=main#87cb59d29e198071ffd18027c4cb985885ba3d14"
+ dependencies = [
+  "dotenv",
+  "indicatif",
+@@ -396,6 +403,12 @@ version = "0.31.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"
+ 
++[[package]]
++name = "heck"
++version = "0.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
++
+ [[package]]
+ name = "http"
+ version = "1.3.1"
+@@ -842,6 +855,17 @@ version = "1.21.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"
+ 
++[[package]]
++name = "papergrid"
++version = "0.17.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "6978128c8b51d8f4080631ceb2302ab51e32cc6e8615f735ee2f83fd269ae3f1"
++dependencies = [
++ "bytecount",
++ "fnv",
++ "unicode-width 0.2.1",
++]
++
+ [[package]]
+ name = "parking_lot"
+ version = "0.11.2"
+@@ -970,6 +994,28 @@ dependencies = [
+  "zerocopy",
+ ]
+ 
++[[package]]
++name = "proc-macro-error-attr2"
++version = "2.0.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "96de42df36bb9bba5542fe9f1a054b8cc87e172759a1868aa05c1f3acc89dfc5"
++dependencies = [
++ "proc-macro2",
++ "quote",
++]
++
++[[package]]
++name = "proc-macro-error2"
++version = "2.0.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "11ec05c52be0a07b08061f7dd003e7d7092e0472bc731b4af7bb1ef876109802"
++dependencies = [
++ "proc-macro-error-attr2",
++ "proc-macro2",
++ "quote",
++ "syn",
++]
++
+ [[package]]
+ name = "proc-macro2"
+ version = "1.0.101"
+@@ -1419,6 +1465,30 @@ dependencies = [
+  "syn",
+ ]
+ 
++[[package]]
++name = "tabled"
++version = "0.20.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "e39a2ee1fbcd360805a771e1b300f78cc88fec7b8d3e2f71cd37bbf23e725c7d"
++dependencies = [
++ "papergrid",
++ "tabled_derive",
++ "testing_table",
++]
++
++[[package]]
++name = "tabled_derive"
++version = "0.11.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0ea5d1b13ca6cff1f9231ffd62f15eefd72543dab5e468735f1a456728a02846"
++dependencies = [
++ "heck",
++ "proc-macro-error2",
++ "proc-macro2",
++ "quote",
++ "syn",
++]
++
+ [[package]]
+ name = "terminfo"
+ version = "0.9.0"
+@@ -1431,6 +1501,15 @@ dependencies = [
+  "phf_codegen",
+ ]
+ 
++[[package]]
++name = "testing_table"
++version = "0.3.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0f8daae29995a24f65619e19d8d31dea5b389f3d853d8bf297bbf607cd0014cc"
++dependencies = [
++ "unicode-width 0.2.1",
++]
++
+ [[package]]
+ name = "thiserror"
+ version = "2.0.16"
+diff --git a/Cargo.toml b/Cargo.toml
+index 0797d21..b0e344d 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -14,5 +14,6 @@ clearscreen = "4.0.2"
+ colored = "3.0.0"
+ figlet-rs = "0.1.5"
+ inquire = "0.7.5"
++tabled = "0.20.0"
+ tracing = "0.1.41"
+ tracing-subscriber = "0.3"
+diff --git a/src/main.rs b/src/main.rs
+index 02acd48..09be5d7 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -5,7 +5,9 @@ use figlet_rs::FIGfont;
+ use clearscreen;
+ use colored::Colorize;
+ 
+-mod search;
++mod utils;
++mod display;
++mod request_plugin;
+ 
+ fn main() -> Result<(), Box<dyn std::error::Error>> {
+     tracing_subscriber::fmt::init();
+@@ -21,7 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+         match select {
+             Ok(choice) => {
+                 match choice {
+-                    "Search" => search::new(),
++                    "Search" => request_plugin::search::new(),
+                     "Bookmark" => println!("Bookmark"),
+                     "Manage Plugin" => println!("Manage Plugin"),
+                     "Exit" => {info!("Exiting..."); break;},
+diff --git a/src/search.rs b/src/search.rs
+deleted file mode 100644
+index 87a7b37..0000000
+--- a/src/search.rs
++++ /dev/null
+@@ -1,64 +0,0 @@
+-use inquire::{InquireError, Select, Text};
+-use tracing::{error, info};
+-use colored::Colorize;
+-use chlaty_core::{request_plugin::search, manage_plugin::get_installed_plugin_list};
+-use chlaty_core::{manage_plugin::get_installed_plugin_list::SourceInfo};
+-use std::fmt;
+-use std::io::{self, Write};
+-
+-pub struct SourceDisplay<'a> {
+-    pub key: &'a String,
+-    pub info: &'a SourceInfo,
+-}
+-
+-impl<'a> fmt::Display for SourceDisplay<'a> {
+-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+-        write!(f, "{} | v{}", self.info.title, self.info.version)
+-    }
+-}
+-
+-
+-pub fn new() {
+-    let installed_plugins = get_installed_plugin_list::new();
+-    match installed_plugins {
+-        Ok(installed_plugins) => {
+-            if installed_plugins.len() == 0 {
+-                error!("No plugin installed.");
+-            }else{
+-
+-                let options: Vec<SourceDisplay> = installed_plugins
+-                    .iter()
+-                    .map(|(key, info)| SourceDisplay { key, info })
+-                    .collect();
+-
+-                let select: Result<SourceDisplay, InquireError> = Select::new("Select plugin: ", options).prompt();
+-
+-                match select {
+-                    Ok(choice) => {
+-                        let selected_plugin_id = choice.key;
+-                        let input = Text::new("Search:").prompt();
+-                        match input {
+-                            Ok(input) => {
+-                                let result = search::new(&selected_plugin_id, input.as_str(), 1);
+-                                match result {
+-                                    Ok(result) => info!("{:?}", result),
+-                                    Err(err) => error!("{}", err),
+-                                }
+-                            },
+-                            Err(_) => error!("An error happened when asking for your name, try again later."),
+-                        }
+-                    },
+-                    Err(_) => error!("There was an error, please try again."),
+-                }
+-            }
+-        },
+-        Err(err) => {error!("{}", err)},
+-    }
+-
+-    io::stdout().flush().unwrap();
+-    println!("{}", "Press enter to continue...".yellow());
+-    let mut dummy = String::new();
+-    io::stdin().read_line(&mut dummy).unwrap();
+-
+-    
+-}
+\ No newline at end of file

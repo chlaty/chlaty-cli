@@ -1,0 +1,247 @@
+[1mdiff --git a/Cargo.lock b/Cargo.lock[m
+[1mindex 61f54de..80187a5 100644[m
+[1m--- a/Cargo.lock[m
+[1m+++ b/Cargo.lock[m
+[36m@@ -68,6 +68,12 @@[m [mversion = "3.19.0"[m
+ source = "registry+https://github.com/rust-lang/crates.io-index"[m
+ checksum = "46c5e41b57b8bba42a04676d81cb89e9ee8e859a1a66f80a5a72e1cb76b34d43"[m
+ [m
+[32m+[m[32m[[package]][m
+[32m+[m[32mname = "bytecount"[m
+[32m+[m[32mversion = "0.6.9"[m
+[32m+[m[32msource = "registry+https://github.com/rust-lang/crates.io-index"[m
+[32m+[m[32mchecksum = "175812e0be2bccb6abe50bb8d566126198344f707e304f45c648fd8f2cc0365e"[m
+[32m+[m
+ [[package]][m
+ name = "byteorder"[m
+ version = "1.5.0"[m
+[36m@@ -111,6 +117,7 @@[m [mdependencies = [[m
+  "colored",[m
+  "figlet-rs",[m
+  "inquire",[m
+[32m+[m[32m "tabled",[m
+  "tracing",[m
+  "tracing-subscriber",[m
+ ][m
+[36m@@ -118,7 +125,7 @@[m [mdependencies = [[m
+ [[package]][m
+ name = "chlaty-core"[m
+ version = "0.1.0"[m
+[31m-source = "git+https://github.com/chlaty/chlaty-core?branch=main#484f29115586bd5bf0f57883ec3c5d53d4c9c2aa"[m
+[32m+[m[32msource = "git+https://github.com/chlaty/chlaty-core?branch=main#87cb59d29e198071ffd18027c4cb985885ba3d14"[m
+ dependencies = [[m
+  "dotenv",[m
+  "indicatif",[m
+[36m@@ -396,6 +403,12 @@[m [mversion = "0.31.1"[m
+ source = "registry+https://github.com/rust-lang/crates.io-index"[m
+ checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"[m
+ [m
+[32m+[m[32m[[package]][m
+[32m+[m[32mname = "heck"[m
+[32m+[m[32mversion = "0.5.0"[m
+[32m+[m[32msource = "registry+https://github.com/rust-lang/crates.io-index"[m
+[32m+[m[32mchecksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"[m
+[32m+[m
+ [[package]][m
+ name = "http"[m
+ version = "1.3.1"[m
+[36m@@ -842,6 +855,17 @@[m [mversion = "1.21.3"[m
+ source = "registry+https://github.com/rust-lang/crates.io-index"[m
+ checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"[m
+ [m
+[32m+[m[32m[[package]][m
+[32m+[m[32mname = "papergrid"[m
+[32m+[m[32mversion = "0.17.0"[m
+[32m+[m[32msource = "registry+https://github.com/rust-lang/crates.io-index"[m
+[32m+[m[32mchecksum = "6978128c8b51d8f4080631ceb2302ab51e32cc6e8615f735ee2f83fd269ae3f1"[m
+[32m+[m[32mdependencies = [[m
+[32m+[m[32m "bytecount",[m
+[32m+[m[32m "fnv",[m
+[32m+[m[32m "unicode-width 0.2.1",[m
+[32m+[m[32m][m
+[32m+[m
+ [[package]][m
+ name = "parking_lot"[m
+ version = "0.11.2"[m
+[36m@@ -970,6 +994,28 @@[m [mdependencies = [[m
+  "zerocopy",[m
+ ][m
+ [m
+[32m+[m[32m[[package]][m
+[32m+[m[32mname = "proc-macro-error-attr2"[m
+[32m+[m[32mversion = "2.0.0"[m
+[32m+[m[32msource = "registry+https://github.com/rust-lang/crates.io-index"[m
+[32m+[m[32mchecksum = "96de42df36bb9bba5542fe9f1a054b8cc87e172759a1868aa05c1f3acc89dfc5"[m
+[32m+[m[32mdependencies = [[m
+[32m+[m[32m "proc-macro2",[m
+[32m+[m[32m "quote",[m
+[32m+[m[32m][m
+[32m+[m
+[32m+[m[32m[[package]][m
+[32m+[m[32mname = "proc-macro-error2"[m
+[32m+[m[32mversion = "2.0.1"[m
+[32m+[m[32msource = "registry+https://github.com/rust-lang/crates.io-index"[m
+[32m+[m[32mchecksum = "11ec05c52be0a07b08061f7dd003e7d7092e0472bc731b4af7bb1ef876109802"[m
+[32m+[m[32mdependencies = [[m
+[32m+[m[32m "proc-macro-error-attr2",[m
+[32m+[m[32m "proc-macro2",[m
+[32m+[m[32m "quote",[m
+[32m+[m[32m "syn",[m
+[32m+[m[32m][m
+[32m+[m
+ [[package]][m
+ name = "proc-macro2"[m
+ version = "1.0.101"[m
+[36m@@ -1419,6 +1465,30 @@[m [mdependencies = [[m
+  "syn",[m
+ ][m
+ [m
+[32m+[m[32m[[package]][m
+[32m+[m[32mname = "tabled"[m
+[32m+[m[32mversion = "0.20.0"[m
+[32m+[m[32msource = "registry+https://github.com/rust-lang/crates.io-index"[m
+[32m+[m[32mchecksum = "e39a2ee1fbcd360805a771e1b300f78cc88fec7b8d3e2f71cd37bbf23e725c7d"[m
+[32m+[m[32mdependencies = [[m
+[32m+[m[32m "papergrid",[m
+[32m+[m[32m "tabled_derive",[m
+[32m+[m[32m "testing_table",[m
+[32m+[m[32m][m
+[32m+[m
+[32m+[m[32m[[package]][m
+[32m+[m[32mname = "tabled_derive"[m
+[32m+[m[32mversion = "0.11.0"[m
+[32m+[m[32msource = "registry+https://github.com/rust-lang/crates.io-index"[m
+[32m+[m[32mchecksum = "0ea5d1b13ca6cff1f9231ffd62f15eefd72543dab5e468735f1a456728a02846"[m
+[32m+[m[32mdependencies = [[m
+[32m+[m[32m "heck",[m
+[32m+[m[32m "proc-macro-error2",[m
+[32m+[m[32m "proc-macro2",[m
+[32m+[m[32m "quote",[m
+[32m+[m[32m "syn",[m
+[32m+[m[32m][m
+[32m+[m
+ [[package]][m
+ name = "terminfo"[m
+ version = "0.9.0"[m
+[36m@@ -1431,6 +1501,15 @@[m [mdependencies = [[m
+  "phf_codegen",[m
+ ][m
+ [m
+[32m+[m[32m[[package]][m
+[32m+[m[32mname = "testing_table"[m
+[32m+[m[32mversion = "0.3.0"[m
+[32m+[m[32msource = "registry+https://github.com/rust-lang/crates.io-index"[m
+[32m+[m[32mchecksum = "0f8daae29995a24f65619e19d8d31dea5b389f3d853d8bf297bbf607cd0014cc"[m
+[32m+[m[32mdependencies = [[m
+[32m+[m[32m "unicode-width 0.2.1",[m
+[32m+[m[32m][m
+[32m+[m
+ [[package]][m
+ name = "thiserror"[m
+ version = "2.0.16"[m
+[1mdiff --git a/Cargo.toml b/Cargo.toml[m
+[1mindex 0797d21..b0e344d 100644[m
+[1m--- a/Cargo.toml[m
+[1m+++ b/Cargo.toml[m
+[36m@@ -14,5 +14,6 @@[m [mclearscreen = "4.0.2"[m
+ colored = "3.0.0"[m
+ figlet-rs = "0.1.5"[m
+ inquire = "0.7.5"[m
+[32m+[m[32mtabled = "0.20.0"[m
+ tracing = "0.1.41"[m
+ tracing-subscriber = "0.3"[m
+[1mdiff --git a/src/main.rs b/src/main.rs[m
+[1mindex 02acd48..09be5d7 100644[m
+[1m--- a/src/main.rs[m
+[1m+++ b/src/main.rs[m
+[36m@@ -5,7 +5,9 @@[m [muse figlet_rs::FIGfont;[m
+ use clearscreen;[m
+ use colored::Colorize;[m
+ [m
+[31m-mod search;[m
+[32m+[m[32mmod utils;[m
+[32m+[m[32mmod display;[m
+[32m+[m[32mmod request_plugin;[m
+ [m
+ fn main() -> Result<(), Box<dyn std::error::Error>> {[m
+     tracing_subscriber::fmt::init();[m
+[36m@@ -21,7 +23,7 @@[m [mfn main() -> Result<(), Box<dyn std::error::Error>> {[m
+         match select {[m
+             Ok(choice) => {[m
+                 match choice {[m
+[31m-                    "Search" => search::new(),[m
+[32m+[m[32m                    "Search" => request_plugin::search::new(),[m
+                     "Bookmark" => println!("Bookmark"),[m
+                     "Manage Plugin" => println!("Manage Plugin"),[m
+                     "Exit" => {info!("Exiting..."); break;},[m
+[1mdiff --git a/src/search.rs b/src/search.rs[m
+[1mdeleted file mode 100644[m
+[1mindex 87a7b37..0000000[m
+[1m--- a/src/search.rs[m
+[1m+++ /dev/null[m
+[36m@@ -1,64 +0,0 @@[m
+[31m-use inquire::{InquireError, Select, Text};[m
+[31m-use tracing::{error, info};[m
+[31m-use colored::Colorize;[m
+[31m-use chlaty_core::{request_plugin::search, manage_plugin::get_installed_plugin_list};[m
+[31m-use chlaty_core::{manage_plugin::get_installed_plugin_list::SourceInfo};[m
+[31m-use std::fmt;[m
+[31m-use std::io::{self, Write};[m
+[31m-[m
+[31m-pub struct SourceDisplay<'a> {[m
+[31m-    pub key: &'a String,[m
+[31m-    pub info: &'a SourceInfo,[m
+[31m-}[m
+[31m-[m
+[31m-impl<'a> fmt::Display for SourceDisplay<'a> {[m
+[31m-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {[m
+[31m-        write!(f, "{} | v{}", self.info.title, self.info.version)[m
+[31m-    }[m
+[31m-}[m
+[31m-[m
+[31m-[m
+[31m-pub fn new() {[m
+[31m-    let installed_plugins = get_installed_plugin_list::new();[m
+[31m-    match installed_plugins {[m
+[31m-        Ok(installed_plugins) => {[m
+[31m-            if installed_plugins.len() == 0 {[m
+[31m-                error!("No plugin installed.");[m
+[31m-            }else{[m
+[31m-[m
+[31m-                let options: Vec<SourceDisplay> = installed_plugins[m
+[31m-                    .iter()[m
+[31m-                    .map(|(key, info)| SourceDisplay { key, info })[m
+[31m-                    .collect();[m
+[31m-[m
+[31m-                let select: Result<SourceDisplay, InquireError> = Select::new("Select plugin: ", options).prompt();[m
+[31m-[m
+[31m-                match select {[m
+[31m-                    Ok(choice) => {[m
+[31m-                        let selected_plugin_id = choice.key;[m
+[31m-                        let input = Text::new("Search:").prompt();[m
+[31m-                        match input {[m
+[31m-                            Ok(input) => {[m
+[31m-                                let result = search::new(&selected_plugin_id, input.as_str(), 1);[m
+[31m-                                match result {[m
+[31m-                                    Ok(result) => info!("{:?}", result),[m
+[31m-                                    Err(err) => error!("{}", err),[m
+[31m-                                }[m
+[31m-                            },[m
+[31m-                            Err(_) => error!("An error happened when asking for your name, try again later."),[m
+[31m-                        }[m
+[31m-                    },[m
+[31m-                    Err(_) => error!("There was an error, please try again."),[m
+[31m-                }[m
+[31m-            }[m
+[31m-        },[m
+[31m-        Err(err) => {error!("{}", err)},[m
+[31m-    }[m
+[31m-[m
+[31m-    io::stdout().flush().unwrap();[m
+[31m-    println!("{}", "Press enter to continue...".yellow());[m
+[31m-    let mut dummy = String::new();[m
+[31m-    io::stdin().read_line(&mut dummy).unwrap();[m
+[31m-[m
+[31m-    [m
+[31m-}[m
+\ No newline at end of file[m

@@ -5,7 +5,9 @@ use figlet_rs::FIGfont;
 use clearscreen;
 use colored::Colorize;
 
-mod search;
+mod utils;
+mod display;
+mod request_plugin;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
@@ -21,7 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         match select {
             Ok(choice) => {
                 match choice {
-                    "Search" => search::new(),
+                    "Search" => request_plugin::search::new(),
                     "Bookmark" => println!("Bookmark"),
                     "Manage Plugin" => println!("Manage Plugin"),
                     "Exit" => {info!("Exiting..."); break;},
