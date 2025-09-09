@@ -115,8 +115,10 @@ dependencies = [
  "chlaty-core",
  "clearscreen",
  "colored",
+ "dotenv",
  "figlet-rs",
  "inquire",
+ "serde_json",
  "tabled",
  "tracing",
  "tracing-subscriber",
@@ -125,7 +127,7 @@ dependencies = [
 [[package]]
 name = "chlaty-core"
 version = "0.1.0"
-source = "git+https://github.com/chlaty/chlaty-core?branch=main#6425307d2d5b0f7bf13db9467c351e386a139393"
+source = "git+https://github.com/chlaty/chlaty-core?branch=main#f23c9911ca3659d66b74022fac7e6a404041989e"
 dependencies = [
  "dotenv",
  "indicatif",
@@ -719,7 +721,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "07033963ba89ebaf1584d767badaa2e8fcec21aedea6b8c0346d487d49c28667"
 dependencies = [
  "cfg-if",
- "windows-targets 0.48.5",
+ "windows-targets 0.53.3",
 ]
 
 [[package]]

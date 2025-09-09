@@ -1,12 +1,12 @@
 use std::num::NonZeroUsize;
 
 use inquire::{InquireError, Select, Text};
-use tracing::{error, info, warn};
-
+use tracing::{error, warn};
+use colored::Colorize;
 
 
 use chlaty_core::{request_plugin::search, manage_plugin::get_installed_plugin_list};
-use crate::display::search_type::{PluginDisplay, SearchDisplay};
+use crate::display::request_plugin::search_type::{PluginDisplay, SearchDisplay};
 use crate::utils::prompt_continue;
 use crate::request_plugin::{get_episode_list};
 
@@ -74,12 +74,14 @@ pub fn new() {
 
                             match select {
                                 Ok(choice) => {
-                                    info!("Selected: {}", choice.id);
+                                    clearscreen::clear().expect("failed to clear screen");
+                                    println!("{}", format!("> {}", &choice.title).purple());
                                     get_episode_list::new(selected_plugin_id, &choice.id);
                                     return;
                                 },
                                 Err(e) => error!("{}", e),
                             }
+                            
                         },
                         Err(e) => error!("{}", e),
                     }
