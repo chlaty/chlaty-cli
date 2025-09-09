@@ -12,8 +12,10 @@ strip = true
 chlaty-core = { git = "https://github.com/chlaty/chlaty-core", branch = "main" }
 clearscreen = "4.0.2"
 colored = "3.0.0"
+dotenv = "0.15.0"
 figlet-rs = "0.1.5"
 inquire = "0.7.5"
+serde_json = "1.0.143"
 tabled = "0.20.0"
 tracing = "0.1.41"
 tracing-subscriber = "0.3"

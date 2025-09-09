@@ -1,14 +1,15 @@
 use std::num::NonZeroUsize;
 
 use inquire::{InquireError, Select, Text};
-use tracing::{error, info, warn};
-use tabled::{Tabled, Table, settings::Style};
+use tracing::{error, info};
+use tabled::{Table, settings::Style};
 use colored::Colorize;
 
 use chlaty_core::{request_plugin::get_episode_list};
-use crate::display::get_episode_list_type::EpisodeListDisplay;
+use crate::display::request_plugin::get_episode_list_type::EpisodeListDisplay;
 use crate::utils::prompt_continue;
-use clearscreen;
+use crate::request_plugin::{get_episode_server};
+
 
 
 pub fn new(plugin_id: &str, id: &str) {
@@ -18,19 +19,23 @@ pub fn new(plugin_id: &str, id: &str) {
         Ok(result) => {
             let mut page_number:NonZeroUsize = NonZeroUsize::new(1).unwrap();
             loop {
-                clearscreen::clear().expect("failed to clear screen");
+                
                 let query_vec = result.get(usize::from(page_number) - 1).unwrap();
-                let mapped: Vec<EpisodeListDisplay> = query_vec.iter().map(|d| EpisodeListDisplay {
-                    index: d.index,
-                    id: &d.id,
-                    title: &d.title
+                let mapped: Vec<EpisodeListDisplay> = query_vec.iter().map(|d| {
+                    let mut title = d.title[..d.title.len().min(20)].to_string();
+                    if title.len() < d.title.len() {
+                        title = format!("{}...", title);
+                    }
+                    return EpisodeListDisplay {
+                        index: d.index.clone(),
+                        title: title
+                    }
                 }).collect();
                 let mut table = Table::new(mapped);
                 table.with(Style::rounded());
 
                 println!("{}", format!("{}", table).cyan());
-                println!("===> [{}/{}] <===", page_number, result.len());
-                
+                println!("{}", format!("===> [{}/{}] <===", page_number, result.len()).purple());
                 let options: Vec<&str> = vec![ "Select episode", "Navigate page", "Exit" ];
 
                 let select: Result<&str, InquireError> = Select::new("Select an option:", options).prompt();
@@ -57,11 +62,11 @@ pub fn new(plugin_id: &str, id: &str) {
                                                 }
 
                                                 if select_id.is_empty() {
-                                                    error!("Unable to find episode from the index you provided.");
+                                                    error!("Unable to find episode from provided index.");
                                                     prompt_continue::new();
                                                 }else{
                                                     info!("Selected episode: {}", select_id);
-                                                    prompt_continue::new();
+                                                    get_episode_server::new(plugin_id, id, select_id);
                                                 }
                                             },
                                             Err(e) => error!("{}", e),

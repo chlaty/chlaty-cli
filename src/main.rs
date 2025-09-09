@@ -4,12 +4,19 @@ use tracing_subscriber;
 use figlet_rs::FIGfont;
 use clearscreen;
 use colored::Colorize;
+use dotenv::dotenv;
 
 mod utils;
 mod display;
 mod request_plugin;
 
+pub const DEFAULT_BINARY_DIRECTORY: &str = "bin";
+pub const DEFAULT_PLUGIN_DIRECTORY: &str = "plugins";
+pub const DEFAULT_STORAGE_DIRECTORY: &str = "storage";
+
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenv().ok();
     tracing_subscriber::fmt::init();
     loop {
         clearscreen::clear().expect("failed to clear screen");
