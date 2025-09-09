@@ -9,6 +9,7 @@ use dotenv::dotenv;
 mod utils;
 mod display;
 mod request_plugin;
+mod manage_plugin;
 
 pub const DEFAULT_BINARY_DIRECTORY: &str = "bin";
 pub const DEFAULT_PLUGIN_DIRECTORY: &str = "plugins";
@@ -24,15 +25,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let figure = standard_font.convert("Chlaty-CLI");
         assert!(figure.is_some());
         println!("{}", figure.unwrap().to_string().cyan());
-        let options: Vec<&str> = vec![ "Search", "Bookmark", "Manage Plugin", "Exit"];
+        let options: Vec<&str> = vec![ "Search", "Bookmark", "Plugins", "Exit"];
         let select: Result<&str, InquireError> = Select::new("Select an option: ", options).prompt();
 
         match select {
             Ok(choice) => {
                 match choice {
                     "Search" => request_plugin::search::new(),
-                    "Bookmark" => println!("Bookmark"),
-                    "Manage Plugin" => println!("Manage Plugin"),
+                    "Plugins" => manage_plugin::main(),
                     "Exit" => {info!("Exiting..."); break;},
                     _ => error!("There was an error, please try again."),
                 }
