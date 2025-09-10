@@ -50,19 +50,13 @@ find "$OUTPUT_DIR" -mindepth 1 -type d -empty -delete
 echo "📝 Generating manifest.json..."
 
 declare -A targets=(
-  ["windows/x86_64"]="chlaty-cli-x86_64-pc-windows-msvc.dll"
-  ["windows/i686"]="chlaty-cli-i686-pc-windows-msvc.dll"
-  ["windows/aarch64"]="chlaty-cli-aarch64-pc-windows-msvc.dll"
-  ["linux/x86_64"]="chlaty-cli-x86_64-unknown-linux-gnu.so"
-  ["linux/i686"]="chlaty-cli-i686-unknown-linux-gnu.so"
-  ["linux/aarch64"]="chlaty-cli-aarch64-unknown-linux-gnu.so"
-  ["linux/armv7"]="chlaty-cli-armv7-unknown-linux-gnueabihf.so"
-  ["macos/x86_64"]="chlaty-cli-x86_64-apple-darwin.dylib"
-  ["macos/aarch64"]="chlaty-cli-aarch64-apple-darwin.dylib"
-  ["android/x86_64"]="chlaty-cli-x86_64-linux-android.so"
-  ["android/aarch64"]="chlaty-cli-aarch64-linux-android.so"
-  ["android/armv7"]="chlaty-cli-armv7-linux-androideabi.so"
-  ["android/i686"]="chlaty-cli-i686-linux-android.so"
+  ["windows/x86_64"]="chlaty-cli-x86_64-pc-windows-msvc.exe"
+  ["windows/i686"]="chlaty-cli-i686-pc-windows-msvc.exe"
+  ["windows/aarch64"]="chlaty-cli-aarch64-pc-windows-msvc.exe"
+  ["linux/x86_64"]="chlaty-cli-x86_64-unknown-linux-gnu"
+  ["linux/aarch64"]="chlaty-cli-aarch64-unknown-linux-gnu"
+  ["macos/x86_64"]="chlaty-cli-x86_64-apple-darwin"
+  ["macos/aarch64"]="chlaty-cli-aarch64-apple-darwin"
 )
 
 # Build manifest as a jq-compatible JSON object
