@@ -12,8 +12,21 @@
 # What's Chlaty-CLI?
 **Chlaty-CLI** is a powerful command-line utility that lets you seamlessly browse and stream your favorite shows.
 
-# Dependencies
+# Installation & Usage
+
+<a href="https://github.com/chlaty/chlaty-cli/releases">
+    <img src="https://img.shields.io/github/v/release/chlaty/chlaty-cli?style=for-the-badge&color=red" />
+</a>
+
+```bash
+./chlaty-cli
+```
+
+# Used Dependencies 
 - **[[chlaty-core]](https://github.com/chlaty/chlaty-core)**: A core package for managing plugins.
+- **[[chlaty-player]](https://github.com/chlaty/chlaty-player)**: Lightweight media player designed for direct customization and feature extensibility.
+
+
 
 # Preview
 <div align="center" style="flex: auto">
