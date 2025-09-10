@@ -1,4 +1,4 @@
-name: Build Chlaty CLI on Windows
+name: Build DLL on Windows
 
 on:
   push:
@@ -8,14 +8,13 @@ on:
 
 jobs:
   build-windows:
+    runs-on: windows-latest
     strategy:
       matrix:
         target:
           - x86_64-pc-windows-msvc     # 64-bit
           - i686-pc-windows-msvc       # 32-bit
           - aarch64-pc-windows-msvc    # ARM64
-    
-    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -30,23 +29,27 @@ jobs:
         with:
           workspaces: '. -> target'
 
-      - name: Install Cross Dependencies
-        run: |
-          cargo install cross
+      - name: Set Linker for i686
+        if: matrix.target == 'i686-pc-windows-msvc'
+        run: echo "CARGO_TARGET_I686_PC_WINDOWS_MSVC_LINKER=link.exe" >> $env:GITHUB_ENV
 
-      - name: Build chlaty-cli
-        run: cross build --release --target ${{ matrix.target }}
+      - name: Set Linker for aarch64
+        if: matrix.target == 'aarch64-pc-windows-msvc'
+        run: echo "CARGO_TARGET_AARCH64_PC_WINDOWS_MSVC_LINKER=link.exe" >> $env:GITHUB_ENV
 
-      - name: Rename chlaty-cli
+      - name: Build DLL
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Rename .dll to target-specific name
         run: |
-          $source = Get-ChildItem -Path "target/${{ matrix.target }}/release/" -Filter *.exe | Select-Object -First 1
-          $destination = Join-Path -Path $source.DirectoryName -ChildPath "chlaty-cli-${{ matrix.target }}.exe"
+          $source = Get-ChildItem -Path "target/${{ matrix.target }}/release/" -Filter *.dll | Select-Object -First 1
+          $destination = Join-Path -Path $source.DirectoryName -ChildPath "chlaty-lib-hianime-${{ matrix.target }}.dll"
           Rename-Item -Path $source.FullName -NewName $destination
 
 
-      - name: Upload Artifact
+      - name: Upload DLL Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: artifact-chlaty-cli-${{ matrix.target }}
-          path: target/${{ matrix.target }}/release/chlaty-cli-${{ matrix.target }}.exe
+          name: artifact-chlaty-lib-hianime-${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/chlaty-lib-hianime-${{ matrix.target }}.dll
 
