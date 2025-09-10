@@ -40,7 +40,7 @@ jobs:
 
 
       - name: Build CLI
-        run: cross build --release --target ${{ matrix.target }}
+        run: cross build --release --toolchain stable --force-non-host --target ${{ matrix.target }}
 
       - name: Rename chlaty-cli
         run: |
