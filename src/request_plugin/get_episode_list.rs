@@ -1,9 +1,10 @@
 use std::num::NonZeroUsize;
 
 use inquire::{InquireError, Select, Text};
-use tracing::{error, info};
+use tracing::{error};
 use tabled::{Table, settings::Style};
 use colored::Colorize;
+use clearscreen;
 
 use chlaty_core::{request_plugin::get_episode_list};
 use crate::display::request_plugin::get_episode_list_type::EpisodeListDisplay;
@@ -12,15 +13,15 @@ use crate::request_plugin::{get_episode_server};
 
 
 
-pub fn new(plugin_id: &str, id: &str) {
+pub fn new(plugin_id: &str, id: &str) -> Result<(), Box<dyn std::error::Error>> {
 
     let result = get_episode_list::new(plugin_id, id);
     match result {
         Ok(result) => {
-            let mut page_number:NonZeroUsize = NonZeroUsize::new(1).unwrap();
+            let mut page_number:NonZeroUsize = NonZeroUsize::new(1).ok_or("Invalid page number")?;
             loop {
-                
-                let query_vec = result.get(usize::from(page_number) - 1).unwrap();
+                clearscreen::clear().expect("failed to clear screen");
+                let query_vec = result.get(usize::from(page_number) - 1).ok_or("Invalid page number")?;
                 let mapped: Vec<EpisodeListDisplay> = query_vec.iter().map(|d| {
                     let mut title = d.title[..d.title.len().min(20)].to_string();
                     if title.len() < d.title.len() {
@@ -53,7 +54,7 @@ pub fn new(plugin_id: &str, id: &str) {
                                                 let mut select_id: &str = "";
                                                 for i in result.iter() {
                                                     for j in i.iter() {
-                                                        if j.index == value.parse::<usize>().unwrap() {
+                                                        if j.index == value.parse::<usize>()? {
                                                             select_id = &j.id;
                                                             
                                                             break;
@@ -65,8 +66,7 @@ pub fn new(plugin_id: &str, id: &str) {
                                                     error!("Unable to find episode from provided index.");
                                                     prompt_continue::new();
                                                 }else{
-                                                    info!("Selected episode: {}", select_id);
-                                                    get_episode_server::new(plugin_id, id, select_id);
+                                                    get_episode_server::new(plugin_id, id, select_id)?;
                                                 }
                                             },
                                             Err(e) => error!("{}", e),
@@ -80,8 +80,8 @@ pub fn new(plugin_id: &str, id: &str) {
                                 let input = Text::new("Enter Page number:").prompt();
                                 match input {
                                     Ok(value) => {
-                                        let parse_page_number = NonZeroUsize::new(value.parse().unwrap()).unwrap();
-                                        if parse_page_number > NonZeroUsize::new(result.len()).unwrap() {
+                                        let parse_page_number = NonZeroUsize::new(value.parse()?).ok_or("Invalid page number")?;
+                                        if parse_page_number > NonZeroUsize::new(result.len()).ok_or("Invalid page number")? {
                                             error!("Page number is out of range.");
                                             prompt_continue::new();
                                         }else{
@@ -106,5 +106,6 @@ pub fn new(plugin_id: &str, id: &str) {
         
 
     prompt_continue::new();
+    return Ok(());
     
 }

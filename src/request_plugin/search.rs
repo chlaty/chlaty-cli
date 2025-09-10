@@ -12,7 +12,7 @@ use crate::request_plugin::{get_episode_list};
 
 
 
-pub fn new() {
+pub fn new() -> Result<(), Box<dyn std::error::Error>> {
     let installed_plugins = get_installed_plugin_list::new();
     match installed_plugins {
         Ok(installed_plugins) => {
@@ -76,8 +76,8 @@ pub fn new() {
                                 Ok(choice) => {
                                     clearscreen::clear().expect("failed to clear screen");
                                     println!("{}", format!("> {}", &choice.title).purple());
-                                    get_episode_list::new(selected_plugin_id, &choice.id);
-                                    return;
+                                    get_episode_list::new(selected_plugin_id, &choice.id)?;
+                                    return Ok(());
                                 },
                                 Err(e) => error!("{}", e),
                             }
@@ -94,5 +94,7 @@ pub fn new() {
 
     
     prompt_continue::new();
+
+    return Ok(());
     
 }

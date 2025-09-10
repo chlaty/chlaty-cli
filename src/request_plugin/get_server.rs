@@ -1,28 +1,30 @@
 use std::process::Command;
-use tracing::{error, info};
+use tracing::{error};
 
 use serde_json::{to_writer_pretty};
 use std::fs;
 use std::env;
 use std::path::{ PathBuf};
 use std::io::{ BufWriter};
+use colored::Colorize;
 
 use chlaty_core::{request_plugin::get_server};
 
+
 use crate::DEFAULT_STORAGE_DIRECTORY;
-use crate::utils::prompt_continue;
+use crate::utils::{prompt_continue, get_player};
 
 
 
-pub fn new(plugin_id: &str, content_id: &str, episode_id: &str, id: &str) {
+pub fn new(plugin_id: &str, content_id: &str, episode_id: &str, id: &str) -> Result<(), Box<dyn std::error::Error>> {
     let storage_dir =  PathBuf::from(env::var("STORAGE_DIRECTORY").unwrap_or(DEFAULT_STORAGE_DIRECTORY.to_string()));
     let plugin_dir = storage_dir.join(plugin_id);
     let episode_dir = plugin_dir
         .join(content_id)
         .join(episode_id);
 
-    
-    info!("Fetching server with id {}...", &id);
+    println!("{}", format!("? Switch to different server if current server not working.").yellow());
+    println!("{}", format!("> Fetching server with id {}...", &id).purple());
     let result = get_server::new(plugin_id, id);
     match result {
         Ok(result) => {
@@ -38,7 +40,7 @@ pub fn new(plugin_id: &str, content_id: &str, episode_id: &str, id: &str) {
                 .write(true).create(true).truncate(true)
                 .open(&manifest_path) {
                     Ok(file) => file,
-                    Err(e) => {error!("{}", e); return;},
+                    Err(e) => {error!("{}", e); return Err(e.into())},
                 };
             let writer = BufWriter::new(file);
 
@@ -57,18 +59,25 @@ pub fn new(plugin_id: &str, content_id: &str, episode_id: &str, id: &str) {
             }
 
             if full_manifest_path.exists(){
-                info!("Launching chlaty-player... | {}", full_manifest_path.to_str().unwrap());
-                Command::new("bin/chlaty-player.exe")
-                    .arg(format!("--manifest={}", full_manifest_path.to_str().unwrap()))
-                    .output()
-                    .expect("Failed to execute command");
+                println!("{}", format!("> Launching chlaty-player... | {}", full_manifest_path.to_str().ok_or("Failed to get manifest path")?).purple());
+                match get_player::new() {
+                    Ok(player_path) => {
+                        Command::new(player_path)
+                            .arg(format!("--manifest={}", full_manifest_path.to_str().ok_or("Failed to get manifest path")?))
+                            .output()
+                            .expect("Failed to execute command");
+                    },
+                    Err(e) => {
+                        error!("{}", e);
+                        error!("Try restarting chlaty-cli.");
+                    },
+                }
             }
-            
-
-            
         },
         Err(e) => error!("{}", e),
     }
         
     prompt_continue::new();
+
+    return Ok(());
 }

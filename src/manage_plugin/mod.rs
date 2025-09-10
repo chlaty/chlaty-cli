@@ -7,18 +7,18 @@ use colored::Colorize;
 
 use chlaty_core::manage_plugin::get_installed_plugin_list;
 
-use inquire::{Text};
 use tabled::{Table, settings::Style};
 
 mod install_plugin;
 mod remove_plugin;
+mod update_plugin;
+mod update_all_plugin;
 
-use crate::utils::prompt_continue;
 use crate::display::manage_plugin::get_installed_plugin_list_type::InstalledPluginListDisplay;
 
 
 
-pub fn main() {
+pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     loop {
         clearscreen::clear().expect("failed to clear screen");
 
@@ -36,8 +36,9 @@ pub fn main() {
                     });
                 }
                 if display_installed_plugin_list.len() == 0 {
-                    println!("{}", "> No plugin installed.".yellow());
+                    println!("{}", "? No plugin installed.".yellow());
                 }else{
+                    println!("{}", "> Installed plugins.".purple());
                     let mut table = Table::new(display_installed_plugin_list);
                     table.with(Style::rounded());
                     println!("{}", format!("{}", table).cyan());
@@ -46,20 +47,23 @@ pub fn main() {
             },
             Err(err) => println!("{}", err),
         }
-        let options: Vec<&str> = vec![ "Install Plugins", "Remove Plugins", "Update Plugins", "Back"];
+        let options: Vec<&str> = vec![ "Install Plugin", "Remove Plugin", "Update Plugin", "Update All Plugin", "Back"];
         let select: Result<&str, InquireError> = Select::new("Select an option: ", options).prompt();
 
         match select {
             Ok(choice) => {
                 match choice {
-                    "Install Plugins" => install_plugin::new(),
-                    "Remove Plugins" => remove_plugin::new(),
-                    "Update Plugins" => println!("Bookmark"),
-                    "Back" => {break},
+                    "Install Plugin" => install_plugin::new()?,
+                    "Remove Plugin" => remove_plugin::new()?,
+                    "Update Plugin" => update_plugin::new()?,
+                    "Update All Plugin" => update_all_plugin::new()?,
+                    "Back" => {
+                        return Ok(())
+                    },
                     _ => error!("There was an error, please try again."),
                 }
             },
-            Err(_) => println!("There was an error, please try again."),
+            Err(_) => error!("There was an error, please try again."),
         }
 
     }

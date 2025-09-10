@@ -10,7 +10,7 @@ use crate::request_plugin::{get_server};
 use clearscreen;
 
 
-pub fn new(plugin_id: &str, content_id:&str, id: &str) {
+pub fn new(plugin_id: &str, content_id:&str, id: &str) -> Result<(), Box<dyn std::error::Error>> {
 
     let result = get_episode_server::new(plugin_id, id);
     match result {
@@ -19,7 +19,7 @@ pub fn new(plugin_id: &str, content_id:&str, id: &str) {
                 clearscreen::clear().expect("failed to clear screen");
                 let mut count = 1;
                 for server_type in result.keys() {
-                    let query_vec = result.get(server_type).unwrap();
+                    let query_vec = result.get(server_type).ok_or("Invalid server type")?;
                     let mapped: Vec<EpisodeServerDisplay> = query_vec.iter().map(|d| {
                         let new_display = EpisodeServerDisplay {
                             index: count,
@@ -54,7 +54,7 @@ pub fn new(plugin_id: &str, content_id:&str, id: &str) {
 
                                                 let mut count: usize = 1;
                                                 for i in result.keys() {
-                                                    for j in result.get(i).unwrap() {
+                                                    for j in result.get(i).ok_or("Invalid server index")? {
                                                         if count == index {
                                                             select_id = &j.id;
                                                             break;
@@ -70,7 +70,7 @@ pub fn new(plugin_id: &str, content_id:&str, id: &str) {
                                                     error!("Unable to find server from provided index.");
                                                     prompt_continue::new();
                                                 }else{
-                                                    get_server::new(plugin_id, content_id, id, select_id);
+                                                    get_server::new(plugin_id, content_id, id, select_id)?;
                                                 }
                                             },
                                             Err(e) => error!("{}", e),
@@ -82,7 +82,7 @@ pub fn new(plugin_id: &str, content_id:&str, id: &str) {
                             }
                             "Back" => {
                                 clearscreen::clear().expect("failed to clear screen");
-                                break;
+                                return Ok(());
                             },
                             _ => error!("There was an error, please try again."),
                         }
@@ -93,7 +93,7 @@ pub fn new(plugin_id: &str, content_id:&str, id: &str) {
 
             
         },
-        Err(e) => error!("{}", e),
+        Err(e) => {error!("{}", e); return Err(e.into())},
     }
         
     

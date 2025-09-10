@@ -1,6 +1,7 @@
 use inquire::{InquireError, Select};
-use tracing::{error, info};
+use tracing::{error};
 use clearscreen;
+use colored::Colorize;
 
 use chlaty_core::manage_plugin::{remove_plugin, get_installed_plugin_list};
 use crate::display::manage_plugin::remove_plugin_type::{PluginDisplay};
@@ -9,13 +10,13 @@ use crate::utils::prompt_continue;
 
 
 
-pub fn new() {
+pub fn new() -> Result<(), Box<dyn std::error::Error>> {
     clearscreen::clear().expect("failed to clear screen");
     let installed_plugins = get_installed_plugin_list::new();
     match installed_plugins {
         Ok(installed_plugins) => {
             if installed_plugins.len() == 0 {
-                error!("No plugin installed.");
+                println!("{}", "? No plugin installed.".yellow());
             }else{
 
                 let options: Vec<PluginDisplay> = installed_plugins
@@ -31,9 +32,9 @@ pub fn new() {
 
                 match select {
                     Ok(choice) => {
-                        info!("Removing plugin ({})...", choice.id);
+                        println!("{}", format!("> Removing plugin ({})...", choice.id).purple());
                         match remove_plugin::new(&choice.id) {
-                            Ok(_) => info!("Plugin removed successfully!"),
+                            Ok(_) => println!("{}", "✓ Plugin removed successfully!".green()),
                             Err(e) => error!("{}", e),
                         }
                     },
@@ -47,5 +48,7 @@ pub fn new() {
 
     
     prompt_continue::new();
+
+    return Ok(());
     
 }
