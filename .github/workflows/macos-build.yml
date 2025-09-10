@@ -8,12 +8,13 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-latest
     strategy:
       matrix:
         target:
           - x86_64-apple-darwin     # Intel Macs
           - aarch64-apple-darwin    # Apple Silicon
+
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -28,8 +29,12 @@ jobs:
         with:
           workspaces: '. -> target'
 
+      - name: Install Cross Dependencies
+        run: |
+          cargo install cross
+
       - name: Build chlaty-cli
-        run: cargo build --release --target ${{ matrix.target }}
+        run: cross build --release --target ${{ matrix.target }}
 
       - name: Rename chlaty-cli
         run: |

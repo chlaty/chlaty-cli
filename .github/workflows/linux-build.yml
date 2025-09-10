@@ -8,12 +8,13 @@ on:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         target:
-          - x86_64-unknown-linux-musl    # Default 64-bit     # 32-bit
-          - aarch64-unknown-linux-musl   # ARM64
+          - x86_64-unknown-linux-gnu    # Default 64-bit     # 32-bit
+          - aarch64-unknown-linux-gnu   # ARM64
+
+    runs-on: ubuntu-latest
     
     steps:
       - uses: actions/checkout@v4
@@ -30,8 +31,6 @@ jobs:
 
       - name: Install Cross Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install musl-tools
           cargo install cross
 
 
