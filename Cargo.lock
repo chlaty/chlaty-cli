@@ -132,7 +132,7 @@ dependencies = [
 [[package]]
 name = "chlaty-core"
 version = "0.1.0"
-source = "git+https://github.com/chlaty/chlaty-core?branch=main#fbb441e3d49056a323ef072e38e4ed9055109dc2"
+source = "git+https://github.com/chlaty/chlaty-core?branch=main#340c42a9e40729b94c24f25c2f1ecdca0f5a3ec6"
 dependencies = [
  "dotenv",
  "indicatif",
@@ -726,7 +726,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "07033963ba89ebaf1584d767badaa2e8fcec21aedea6b8c0346d487d49c28667"
 dependencies = [
  "cfg-if",
- "windows-targets 0.48.5",
+ "windows-targets 0.53.3",
 ]
 
 [[package]]
