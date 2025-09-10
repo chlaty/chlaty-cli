@@ -8,13 +8,14 @@ on:
 
 jobs:
   build-windows:
-    runs-on: windows-latest
     strategy:
       matrix:
         target:
           - x86_64-pc-windows-msvc     # 64-bit
           - i686-pc-windows-msvc       # 32-bit
           - aarch64-pc-windows-msvc    # ARM64
+    
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
