@@ -5,7 +5,7 @@
         <img src="https://img.shields.io/github/v/release/chlaty/chlaty-cli" />
     </a>
     <a href="https://github.com/chlaty/chlaty-cli/releases">
-        <img src="https://img.shields.io/github/downloads/chlaty/chlaty-cli/total?color=red" />
+        <img src="https://img.shields.io/github/downloads/chlaty/chlaty-cli/total?color=green" />
     </a>
 </div>
 
@@ -20,6 +20,16 @@
 
 ```bash
 ./chlaty-cli
+```
+
+# Environment Config
+```bash
+# Directory for installing binaries.
+CHLATY_BIN_DIRECTORY="bin"
+# Directory for installing plugins.
+CHLATY_PLUGIN_DIRECTORY="plugins"
+# Directory for generated manifest.
+CHLATY_STORAGE_DIRECTORY="storage"
 ```
 
 # Used Dependencies 
