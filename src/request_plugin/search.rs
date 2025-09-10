@@ -17,7 +17,7 @@ pub fn new() -> Result<(), Box<dyn std::error::Error>> {
     match installed_plugins {
         Ok(installed_plugins) => {
             if installed_plugins.len() == 0 {
-                error!("No plugin installed.");
+                println!("{}", "? No plugin installed.".yellow());
             }else{
 
                 let options: Vec<PluginDisplay> = installed_plugins

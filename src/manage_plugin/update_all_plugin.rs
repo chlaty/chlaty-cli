@@ -22,7 +22,7 @@ pub fn new() -> Result<(), Box<dyn std::error::Error>> {
                 for (plugin_id, info) in plugin_list.iter() {
                     
                     
-                    println!("{}", format!("> Checking updating for plugin ({})...", plugin_id).cyan());
+                    println!("{}", format!("> Checking update for plugin ({})...", plugin_id).purple());
 
                     
                     

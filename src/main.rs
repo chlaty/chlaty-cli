@@ -10,6 +10,7 @@ mod utils;
 mod display;
 mod request_plugin;
 mod manage_plugin;
+mod manage_player;
 
 pub const DEFAULT_BIN_DIRECTORY: &str = "bin";
 pub const DEFAULT_PLUGIN_DIRECTORY: &str = "plugins";
@@ -21,14 +22,17 @@ pub const PLAYER_MANIFEST_URL: &str = "https://raw.githubusercontent.com/chlaty/
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     tracing_subscriber::fmt::init();
-
+    clearscreen::clear().expect("failed to clear screen");
+    
     println!("{}", format!("> Checking for chlaty-player...").purple());
-    match utils::get_player::new() {
-        Ok(player_path) => println!("{}", format!("> Chlaty-player found! | {}", player_path.display()).green()),
+    match utils::get_installed_player::new() {
+        Ok(player_info) => {
+            println!("{}", format!("> Chlaty-player found! | {}", player_info.file).green())
+        },
         Err(_) => {
             println!("{}", format!("? Chlaty-player not found!").yellow());
             println!("{}", format!("> Installing chlaty-player...").purple());
-            utils::download_player::new()?;
+            utils::install_player::new("latest")?;
         },
     };
 
@@ -40,7 +44,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("{}", figure.unwrap().to_string().cyan());
         println!("{}", format!("v{}\n", env!("CARGO_PKG_VERSION")).purple());
 
-        let options: Vec<&str> = vec!["Search", "Plugin", "Exit"];
+        let options: Vec<&str> = vec!["Search", "Plugin", "Chlaty Player", "Exit"];
         let select: Result<&str, InquireError> = Select::new("Select an option: ", options).prompt();
 
         match select {
@@ -48,7 +52,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 match choice {
                     "Search" => request_plugin::search::new()?,
                     "Plugin" => manage_plugin::main()?,
+                    "Chlaty Player" => manage_player::main()?,
                     "Exit" => {info!("Exiting..."); break;},
+                    
                     _ => error!("There was an error, please try again."),
                 }
             },

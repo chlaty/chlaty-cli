@@ -1,0 +1,51 @@
+name: Build Chlaty CLI on Linux
+
+on:
+  push:
+    branches: [build]
+  pull_request:
+    branches: [build]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - x86_64-unknown-linux-gnu     # Default 64-bit     # 32-bit
+          - aarch64-unknown-linux-gnu    # ARM64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust and Target
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          target: ${{ matrix.target }}
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: '. -> target'
+
+      - name: Install Cross Dependencies
+        run: |
+          sudo apt-get update
+          if [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
+            sudo apt-get install gcc-aarch64-linux-gnu
+            echo "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
+          fi
+
+      - name: Build CLI
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Rename chlaty-cli
+        run: |
+          mv target/${{ matrix.target }}/release/chlaty-cli target/${{ matrix.target }}/release/chlaty-cli-${{ matrix.target }}
+
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-chlaty-cli-${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/chlaty-cli-${{ matrix.target }}

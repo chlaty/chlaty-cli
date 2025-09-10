@@ -47,16 +47,16 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
             },
             Err(err) => println!("{}", err),
         }
-        let options: Vec<&str> = vec![ "Install Plugin", "Remove Plugin", "Update Plugin", "Update All Plugin", "Back"];
+        let options: Vec<&str> = vec![ "Install plugin", "Remove plugin", "Update plugin", "Update all plugin", "Back"];
         let select: Result<&str, InquireError> = Select::new("Select an option: ", options).prompt();
 
         match select {
             Ok(choice) => {
                 match choice {
-                    "Install Plugin" => install_plugin::new()?,
-                    "Remove Plugin" => remove_plugin::new()?,
-                    "Update Plugin" => update_plugin::new()?,
-                    "Update All Plugin" => update_all_plugin::new()?,
+                    "Install plugin" => install_plugin::new()?,
+                    "Remove plugin" => remove_plugin::new()?,
+                    "Update plugin" => update_plugin::new()?,
+                    "Update all plugin" => update_all_plugin::new()?,
                     "Back" => {
                         return Ok(())
                     },

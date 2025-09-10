@@ -35,7 +35,7 @@ pub fn new() -> Result<(), Box<dyn std::error::Error>> {
 
                 match select {
                     Ok(choice) => {
-                        println!("{}", format!("> Checking updating for plugin ({})...", choice.id).cyan()); 
+                        println!("{}", format!("> Checking update for plugin ({})...", choice.id).purple()); 
 
                         let plugin_list_result = get_plugin_list::new();
 

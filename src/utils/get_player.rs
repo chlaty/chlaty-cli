@@ -1,42 +1,43 @@
-use serde_json::{from_str};
-use serde::{Deserialize, Serialize};
+use serde_json::{from_reader};
+use std::collections::HashMap;
 
-use std::fs;
-
-
-use std::str::from_utf8;
-use std::env;
-use std::path::{ PathBuf };
-use sled;
-
-use crate::{ DEFAULT_BIN_DIRECTORY };
+use std::io::{BufReader};
+use reqwest;
 
 
 
-#[derive(Debug, Deserialize, Serialize)]
+use crate::{ PLAYER_MANIFEST_URL };
+
+
 pub struct PlayerInfo {
-    pub file: String,
-    pub version: String
-    
+    pub version: String,
+    pub manifest: String
 }
 
+pub fn new(version: &str) -> Result<PlayerInfo, Box<dyn std::error::Error>> {
 
-pub fn new() -> Result<PathBuf, Box<dyn std::error::Error>> {
-    let bin_dir = PathBuf::from(env::var("CHLATY_BIN_DIRECTORY").unwrap_or(DEFAULT_BIN_DIRECTORY.to_string()));
-    fs::create_dir_all(&bin_dir)?;
+    let client = reqwest::blocking::Client::new();
+    let res = client.get(PLAYER_MANIFEST_URL).send()?;
 
-    let bin_manifest = bin_dir.join("manifest");
+    if res.status().is_success() {
+        let manifest_reader = BufReader::new(res);
+        let manifest_data: HashMap<String, String>  = from_reader(manifest_reader)?;
+        
+        let selected_version: String;
 
-    let tree = sled::open(&bin_manifest)?;
-    let value = tree.get("chlaty-player".as_bytes())?.ok_or("Failed to get chalty-player")?;
-    let player_info: PlayerInfo = from_str(from_utf8(&value)?)?;
-    
-    let player_path = PathBuf::from(&player_info.file);
-
-    if !player_path.exists() {
-        return Err("Chlaty-player not found".into());
+        if version == "latest" {
+            let latest_version = manifest_data.get("latest-version").ok_or("Failed to get latest version")?.as_str().to_string();
+            selected_version = latest_version;
+        }else{
+            selected_version = version.to_string();
+        }
+        
+        
+        let manifest_url = manifest_data.get(&selected_version).ok_or("Failed to get latest manifest url")?.as_str().to_string();
+        
+        return Ok(PlayerInfo { version: selected_version, manifest: manifest_url });
     }
     
-    return Ok(player_path);
+    return Err("Failed to get manifest url".into());
 
 }

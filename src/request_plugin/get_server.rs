@@ -12,7 +12,7 @@ use chlaty_core::{request_plugin::get_server};
 
 
 use crate::DEFAULT_STORAGE_DIRECTORY;
-use crate::utils::{prompt_continue, get_player};
+use crate::utils::{prompt_continue, get_installed_player};
 
 
 
@@ -60,9 +60,9 @@ pub fn new(plugin_id: &str, content_id: &str, episode_id: &str, id: &str) -> Res
 
             if full_manifest_path.exists(){
                 println!("{}", format!("> Launching chlaty-player... | {}", full_manifest_path.to_str().ok_or("Failed to get manifest path")?).purple());
-                match get_player::new() {
-                    Ok(player_path) => {
-                        Command::new(player_path)
+                match get_installed_player::new() {
+                    Ok(player_info) => {
+                        Command::new(player_info.file)
                             .arg(format!("--manifest={}", full_manifest_path.to_str().ok_or("Failed to get manifest path")?))
                             .output()
                             .expect("Failed to execute command");
