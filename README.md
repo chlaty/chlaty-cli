@@ -29,7 +29,7 @@
 ./chlaty-cli
 ```
 
-# Environment Config
+### Environment Config
 ```bash
 # Directory for installing binaries.
 CHLATY_BIN_DIRECTORY="bin"
