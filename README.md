@@ -12,6 +12,13 @@
 # What's Chlaty-CLI?
 **Chlaty-CLI** is a powerful command-line utility that lets you seamlessly browse and stream your favorite shows.
 
+# Preview
+<div align="center" style="flex: auto">
+  <img
+    src="https://github.com/user-attachments/assets/3584a48b-f0a1-4c7f-b9d6-3119a4285281"
+    style="width: 100%; object-fit: contain; border-radius: 6px" />
+</div>
+
 # Installation & Usage
 
 <a href="https://github.com/chlaty/chlaty-cli/releases">
@@ -37,10 +44,3 @@ CHLATY_STORAGE_DIRECTORY="storage"
 - **[[chlaty-player]](https://github.com/chlaty/chlaty-player)**: Lightweight media player designed for direct customization and feature extensibility.
 
 
-
-# Preview
-<div align="center" style="flex: auto">
-  <img
-    src="https://github.com/user-attachments/assets/3584a48b-f0a1-4c7f-b9d6-3119a4285281"
-    style="width: 100%; object-fit: contain; border-radius: 6px" />
-</div>
