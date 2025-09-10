@@ -30,6 +30,8 @@
 ```
 
 ### Environment Config
+- If none of the directory is set it will default to current working directory.
+- Set the directory to specfic path to avoid conflict and removal of existing directory.
 ```bash
 # Directory for installing binaries.
 CHLATY_BIN_DIRECTORY="bin"
@@ -38,6 +40,7 @@ CHLATY_PLUGIN_DIRECTORY="plugins"
 # Directory for generated manifest.
 CHLATY_STORAGE_DIRECTORY="storage"
 ```
+
 
 # Used Dependencies 
 - **[[chlaty-core]](https://github.com/chlaty/chlaty-core)**: A core package for managing plugins.
