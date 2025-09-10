@@ -8,17 +8,13 @@ on:
 
 jobs:
   build-linux:
+    runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
-        include:
-          - platform: 'ubuntu-22.04'
-            target: 'x86_64-unknown-linux-musl'
-          - platform: 'ubuntu-22.04-arm'
-            target: 'aarch64-unknown-linux-musl'
-
-    runs-on: ${{ matrix.platform }}
-
+        target:
+          - x86_64-unknown-linux-musl    # Default 64-bit     # 32-bit
+          - aarch64-unknown-linux-musl   # ARM64
+    
     steps:
       - uses: actions/checkout@v4
 
@@ -40,7 +36,7 @@ jobs:
 
 
       - name: Build CLI
-        run: cross build --release --force-non-host --target ${{ matrix.target }}
+        run: cross build --release --target ${{ matrix.target }}
 
       - name: Rename chlaty-cli
         run: |
