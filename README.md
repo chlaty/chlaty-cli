@@ -30,8 +30,8 @@
 ```
 
 ### Environment Config
-- If none of the directory is set it will default to current working directory.
-- Set the directory to specfic path to avoid conflict and removal of existing directory.
+- If none of the directory is set, it will default to current working directory.
+- Set the directory to specfic path to prevent conflict and removal of existing directory.
 ```bash
 # Directory for installing binaries.
 CHLATY_BIN_DIRECTORY="bin"
