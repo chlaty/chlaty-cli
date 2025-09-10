@@ -22,7 +22,6 @@ mkdir -p "$OUTPUT_DIR"
 
 # List of workflows to process
 WORKFLOWS=(
-  "android-build.yml"
   "linux-build.yml"
   "macos-build.yml"
   "windows-build.yml"
