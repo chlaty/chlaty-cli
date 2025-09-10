@@ -53,8 +53,8 @@ declare -A targets=(
   ["windows/x86_64"]="chlaty-cli-x86_64-pc-windows-msvc.exe"
   ["windows/i686"]="chlaty-cli-i686-pc-windows-msvc.exe"
   ["windows/aarch64"]="chlaty-cli-aarch64-pc-windows-msvc.exe"
-  ["linux/x86_64"]="chlaty-cli-x86_64-unknown-linux-gnu"
-  ["linux/aarch64"]="chlaty-cli-aarch64-unknown-linux-gnu"
+  ["linux/x86_64"]="chlaty-cli-x86_64-unknown-linux-musl"
+  ["linux/aarch64"]="chlaty-cli-aarch64-unknown-linux-musl"
   ["macos/x86_64"]="chlaty-cli-x86_64-apple-darwin"
   ["macos/aarch64"]="chlaty-cli-aarch64-apple-darwin"
 )
