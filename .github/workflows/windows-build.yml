@@ -29,16 +29,12 @@ jobs:
         with:
           workspaces: '. -> target'
 
-      - name: Set Linker for i686
-        if: matrix.target == 'i686-pc-windows-msvc'
-        run: echo "CARGO_TARGET_I686_PC_WINDOWS_MSVC_LINKER=link.exe" >> $env:GITHUB_ENV
-
-      - name: Set Linker for aarch64
-        if: matrix.target == 'aarch64-pc-windows-msvc'
-        run: echo "CARGO_TARGET_AARCH64_PC_WINDOWS_MSVC_LINKER=link.exe" >> $env:GITHUB_ENV
+      - name: Install Cross Dependencies
+        run: |
+          cargo install cross
 
       - name: Build chlaty-cli
-        run: cargo build --release --target ${{ matrix.target }}
+        run: cross build --release --target ${{ matrix.target }}
 
       - name: Rename chlaty-cli
         run: |

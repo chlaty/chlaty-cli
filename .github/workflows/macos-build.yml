@@ -28,8 +28,12 @@ jobs:
         with:
           workspaces: '. -> target'
 
+      - name: Install Cross Dependencies
+        run: |
+          cargo install cross
+
       - name: Build chlaty-cli
-        run: cargo build --release --target ${{ matrix.target }}
+        run: cross build --release --target ${{ matrix.target }}
 
       - name: Rename chlaty-cli
         run: |
