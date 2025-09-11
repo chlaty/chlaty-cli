@@ -8,7 +8,7 @@ fi
 
 # Define ENV
 REPO="chlaty/chlaty-cli"
-VERSION="0.1.0"
+VERSION="0.1.1"
 OUTPUT_DIR="artifacts"
 
 
